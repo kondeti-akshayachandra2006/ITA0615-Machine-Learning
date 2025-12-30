@@ -1,0 +1,20 @@
+dataset = [
+    ['Big', 'Red', 'Circle', 'No'],
+    ['Small', 'Red', 'Circle', 'No'],
+    ['Small', 'Red', 'Triangle', 'Yes'],
+    ['Big', 'Blue', 'Circle', 'No'],
+    ['Small', 'Blue', 'Circle', 'Yes']
+]
+hypothesis = None
+for instance in dataset:
+    attributes = instance[:-1]
+    label = instance[-1]
+if label == 'Yes':
+        if hypothesis is None:
+            hypothesis = attributes.copy()
+        else:
+            for i in range(len(hypothesis)):
+                if hypothesis[i] != attributes[i]:
+                    hypothesis[i] = '?'
+print("Most Specific Hypothesis:")
+print(hypothesis)
