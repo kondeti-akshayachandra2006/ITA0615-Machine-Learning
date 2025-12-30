@@ -1,0 +1,39 @@
+import pandas as pd
+import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+data = load_breast_cancer()
+df = pd.DataFrame(data.data, columns=data.feature_names)
+df['target'] = data.target
+print("\n----- First Five Rows of Dataset -----")
+print(df.head())
+print("\n----- Statistical Summary of Dataset -----")
+print(df.describe())
+print("\n----- Columns and Data Types -----")
+print(df.dtypes)
+print("\n----- Null Values Before Handling -----")
+print(df.isnull().sum())
+for column in df.columns:
+    if df[column].isnull().sum() > 0:
+        df[column].fillna(df[column].mode()[0], inplace=True)
+print("\n----- Null Values After Handling -----")
+print(df.isnull().sum())
+X = df.drop('target', axis=1)
+y = df['target']
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+print("\nTraining Data Shape:", X_train.shape)
+print("Testing Data Shape:", X_test.shape)
+nb = GaussianNB()
+nb.fit(X_train, y_train)
+y_pred = nb.predict(X_test)
+cm = confusion_matrix(y_test, y_pred)
+print("\n----- Confusion Matrix -----")
+print(cm)
+accuracy = accuracy_score(y_test, y_pred)
+print("\nAccuracy:", accuracy)
+print("\n----- Classification Report -----")
+print(classification_report(y_test, y_pred))
